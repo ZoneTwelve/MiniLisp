@@ -14,7 +14,7 @@ while getopts ":p:t:s:" opt; do
     ;;
     t) testcase="$OPTARG" # testcase folder
     ;;
-    t) code="$OPTARG" # source program
+    s) code="$OPTARG" # source program
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
