@@ -1,0 +1,81 @@
+#!/bin/bash
+
+program=./program
+testcase=./testcase
+code=main
+RED="\e[31m"
+BLINK="\e[5m"
+GREEN="\e[32m"
+RESET="\e[0m"
+BGFILL="\e[7m"
+while getopts ":p:t:s:" opt; do
+  case $opt in
+    p) program="$OPTARG" # testing program
+    ;;
+    t) testcase="$OPTARG" # testcase folder
+    ;;
+    t) code="$OPTARG" # source program
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+
+# compile program
+if $(make run code=$code output=$program);
+then
+  echo -e $GREEN"Compile Success"$RESET
+else
+  echo -e $RED"Compile Failed!"$RESET
+fi
+
+#if [ -f "./program" ]; then
+#  echo -e "$BLINK$GREEN@Compile success!$RESET"
+#fi
+final="success" # AC
+for c in $testcase/*.in; do
+  bcase=`basename $c .in`
+  echo "_____________ $bcase ______________"
+  testout=`$program < $c` # > __testcase
+  echo $testout > __testcase
+  gout=`basename $(md5sum $testcase/$bcase.out)` # good output
+  uout=`basename $(md5sum __testcase)` # your output
+  if [ "$gout" = "$uout" ];
+  then
+    echo ""
+    echo -e "$GREEN $bcase's Answer is correct! $RESET"
+    echo ""
+  else
+    
+    echo "------------Your output:----------"
+    echo $testout
+    echo "------------Real Output:----------"
+    cat $testcase/$bcase.out
+    echo "----------------------------------"
+    echo ""
+    echo -e "$RED Wrong Answer! $RESET"
+    final="failed"
+  fi
+  echo "===================================="
+done
+
+rm -f __testcase # remove test output file
+
+echo -e $BLINK$BGFILL
+if [ "$final" = "success" ];
+then
+  echo -e "$GREEN"
+  echo "                       "
+  echo "  Alternating Current  "
+  echo "                       "
+else
+  echo -e "$RED"
+  echo "                       "
+  echo "     Wrong  Answer     "
+  echo "                       "
+fi
+echo -e $RESET
+# running test case
+
+
+

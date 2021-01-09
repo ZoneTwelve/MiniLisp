@@ -10,6 +10,9 @@ run:
 	$(FLEX) -o $(code).yy.c $(code).l
 	$(CC) -c -g -I.. $(code).yy.c
 	$(CC) -o $(output) $(code).tab.o $(code).yy.c -ll
-	$(MAKE) clean
+	#$(MAKE) clean
 clean:
 	rm -f $(code).tab.? $(code).yy.?
+test:
+	make run output=$(output) code=$(code)
+	./auto-test $(output)
