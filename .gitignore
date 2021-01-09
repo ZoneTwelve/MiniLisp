@@ -56,3 +56,8 @@ program*
 
 # vim temp file
 .*.swp
+
+# backup
+backup/*
+WA_*
+AC_*

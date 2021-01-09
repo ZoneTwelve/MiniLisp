@@ -2,6 +2,7 @@
 
 program=./program
 testcase=./testcase
+TIMESTAMP=$(date +"%Y%m%d-%H%M%S-%N")
 code=main
 RED="\e[31m"
 BLINK="\e[5m"
@@ -20,7 +21,7 @@ while getopts ":p:t:s:" opt; do
     ;;
   esac
 done
-
+echo $program
 # compile program
 if $(make run code=$code output=$program);
 then
@@ -33,27 +34,29 @@ fi
 #  echo -e "$BLINK$GREEN@Compile success!$RESET"
 #fi
 final="success" # AC
+
 for c in $testcase/*.in; do
   bcase=`basename $c .in`
   echo "_____________ $bcase ______________"
+  echo "------------Your output:----------"
   testout=`$program < $c` # > __testcase
+  echo $testout
   echo $testout > __testcase
   gout=`basename $(md5sum $testcase/$bcase.out)` # good output
   uout=`basename $(md5sum __testcase)` # your output
   if [ "$gout" = "$uout" ];
   then
     echo ""
-    echo -e "$GREEN $bcase's Answer is correct! $RESET"
+    echo -e "$GREEN   $bcase's Answer is correct! $RESET"
+    echo "----------------------------------"
     echo ""
   else
     
-    echo "------------Your output:----------"
-    echo $testout
     echo "------------Real Output:----------"
     cat $testcase/$bcase.out
     echo "----------------------------------"
     echo ""
-    echo -e "$RED Wrong Answer! $RESET"
+    echo -e "$RED       Wrong Answer! $RESET"
     final="failed"
   fi
   echo "===================================="
@@ -65,16 +68,21 @@ echo -e $BLINK$BGFILL
 if [ "$final" = "success" ];
 then
   echo -e "$GREEN"
-  echo "                       "
-  echo "  Alternating Current  "
-  echo "                       "
+  echo "                                    "
+  echo "        Alternating  Current        "
+  echo "                                    "
+  BAK=AC_$TIMESTAMP
 else
   echo -e "$RED"
-  echo "                       "
-  echo "     Wrong  Answer     "
-  echo "                       "
+  echo "                                    "
+  echo "            Wrong Answer            "
+  echo "                                    "
+  BAK=WA_$TIMESTAMP
 fi
 echo -e $RESET
+
+# auto backup
+make bak BAKNAME=$BAK > /dev/null
 # running test case
 
 
