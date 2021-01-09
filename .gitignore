@@ -55,7 +55,7 @@ dkms.conf
 program*
 
 # vim temp file
-.*.swp
+*.swp
 
 # backup
 backup/*
