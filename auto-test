@@ -9,13 +9,13 @@ BLINK="\e[5m"
 GREEN="\e[32m"
 RESET="\e[0m"
 BGFILL="\e[7m"
-while getopts ":p:t:s:" opt; do
+while getopts ":p:t:c:" opt; do
   case $opt in
     p) program="$OPTARG" # testing program
     ;;
     t) testcase="$OPTARG" # testcase folder
     ;;
-    s) code="$OPTARG" # source program
+    c) code="$OPTARG" # source program
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
@@ -34,14 +34,19 @@ fi
 #  echo -e "$BLINK$GREEN@Compile success!$RESET"
 #fi
 final="success" # AC
-
+part="false"
 for c in $testcase/*.in; do
   bcase=`basename $c .in`
   echo "_____________ $bcase ______________"
   echo "------------Your output:----------"
-  testout=`$program < $c` # > __testcase
-  echo $testout
-  echo $testout > __testcase
+  echo -e '\e[33m'
+  $program < $c > __testcase
+  testout=`cat __testcase`
+  #testout=`$program < $c` # > __testcase
+  cat __testcase
+  #echo $testout
+  #echo $testout > __testcase
+  echo -e $RESET
   gout=`basename $(md5sum $testcase/$bcase.out)` # good output
   uout=`basename $(md5sum __testcase)` # your output
   if [ "$gout" = "$uout" ];
@@ -50,6 +55,7 @@ for c in $testcase/*.in; do
     echo -e "$GREEN   $bcase's Answer is correct! $RESET"
     echo "----------------------------------"
     echo ""
+    part="true"
   else
     
     echo "------------Real Output:----------"
@@ -72,6 +78,13 @@ then
   echo "        Alternating  Current        "
   echo "                                    "
   BAK=AC_$TIMESTAMP
+elif [ "$part" = "true" ];
+then 
+  echo -e "\e[33m"
+  echo "                                    "
+  echo "         Partially  Correct         "
+  echo "                                    "
+  BAK=PA_$TIMESTAMP
 else
   echo -e "$RED"
   echo "                                    "
