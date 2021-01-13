@@ -7,6 +7,7 @@ code=main
 RED="\e[31m"
 BLINK="\e[5m"
 GREEN="\e[32m"
+BLUE="\e[34m"
 RESET="\e[0m"
 BGFILL="\e[7m"
 while getopts ":p:t:c:" opt; do
@@ -37,6 +38,7 @@ final="success" # AC
 part="false"
 for c in $testcase/*.in; do
   bcase=`basename $c .in`
+  echo -e $RESET
   echo "_____________ $bcase ______________"
   echo "------------Your output:----------"
   echo -e '\e[33m'
@@ -59,10 +61,12 @@ for c in $testcase/*.in; do
   else
     
     echo "------------Real Output:----------"
+    echo -e $BLUE
     cat $testcase/$bcase.out
+    echo -e $RESET
     echo "----------------------------------"
     echo ""
-    echo -e "$RED       Wrong Answer! $RESET"
+    echo -e "$RED       Wrong Answer!$RESET"
     final="failed"
   fi
   echo "===================================="

@@ -36,3 +36,29 @@ return value meaning
   - testing
 - Error code: 2
   - testing
+
+# Intro
+- program 
+  - program start 
+- expr 
+  - program analysis
+- math_*
+  - calculation operator (function)
+- *_ret
+  - date type checker && value return
+- condition
+  - GreaThen (greater then A)
+  - LessThen (less then A)
+  - math_equal 
+  - if_numb (return number)
+  - if_bool (return boolean)
+- print
+  - print_num
+  - print_bool
+
+## 流程:
+1. program -> expr program 持續吃 input
+2. expr 判斷 是否接觸到 print, math calculation, bool calculation 等 token
+3. math do math
+4. boolean do boolean
+5. from math to boolean throw error, boolean also
